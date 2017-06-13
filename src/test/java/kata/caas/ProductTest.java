@@ -1,6 +1,7 @@
 package kata.caas;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
@@ -38,6 +39,7 @@ public class ProductTest {
     }
 
     @Test
+    @Ignore
     public void testInput2() {
         ProductManager productManager = new ProductManager();
         Product boite = new Product();
@@ -60,6 +62,7 @@ public class ProductTest {
     }
 
     @Test
+    @Ignore
     public void testInput3() {
         ProductManager productManager = new ProductManager();
         Product parfumImporte = new Product();

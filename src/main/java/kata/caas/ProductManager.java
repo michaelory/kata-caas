@@ -17,23 +17,23 @@ public class ProductManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductManager.class);
 
-    private static final double TAUX_10 = 0.10;
-    private static final double TAUX_05 = 0.05;
+    private static final double RATE_10 = 0.10;
+    private static final double RATE_05 = 0.05;
     private static final String FORMAT_PATTERN = "0.00";
 
-    private Function<Double, Double> ROUND_CHOICE = (tauxTax) -> tauxTax == TAUX_10 ? TAUX_05 : TAUX_10;
-    private BiFunction<Double, Double, Double> APPLY_ROUND = (amountHT, tauxTax) -> Math.round(amountHT * tauxTax / ROUND_CHOICE.apply(tauxTax)) * ROUND_CHOICE.apply(tauxTax);
+    private Function<Double, Double> ROUND_CHOICE = (tauxTax) -> tauxTax == RATE_10 ? RATE_05 : RATE_10;
+    private BiFunction<Double, Double, Double> APPLY_TAX = (amountHT, tauxTax) -> Math.round(amountHT * tauxTax / ROUND_CHOICE.apply(tauxTax)) * ROUND_CHOICE.apply(tauxTax);
 
     private List<Product> products = new ArrayList<>();
 
     private Double totalTax = new Double(0);
     private Double totalAmount = new Double(0);
 
-    private DecimalFormat df;
+    private DecimalFormat decimalFormat;
 
     public ProductManager() {
-        df = new DecimalFormat(FORMAT_PATTERN);
-        df.setRoundingMode(RoundingMode.HALF_UP);
+        decimalFormat = new DecimalFormat(FORMAT_PATTERN);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
     }
 
     public Product addProduct(String label, Double amountHT) {
@@ -57,7 +57,7 @@ public class ProductManager {
     }
 
     public String format(Double amountTTC) {
-        return df.format(amountTTC);
+        return decimalFormat.format(amountTTC);
     }
 
     public void print() {
@@ -69,15 +69,15 @@ public class ProductManager {
     private void calculateAmounts(Product product) {
         Double ttc = product.getAmountHT();
         if (product.isTvaApplied()) {
-            double amountTax = APPLY_ROUND.apply(product.getAmountHT(), TAUX_10);
-            LOG.debug("{} APPLY TVA ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), TAUX_10, amountTax});
+            double amountTax = APPLY_TAX.apply(product.getAmountHT(), RATE_10);
+            LOG.debug("{} APPLY TVA ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), RATE_10, amountTax});
             totalTax = totalTax + amountTax;
             ttc = ttc + amountTax;
         }
 
         if (product.isImported()) {
-            double amountTax = APPLY_ROUND.apply(product.getAmountHT(), TAUX_05);
-            LOG.debug("{} APPLY IMPORTED ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), TAUX_05, amountTax});
+            double amountTax = APPLY_TAX.apply(product.getAmountHT(), RATE_05);
+            LOG.debug("{} APPLY IMPORTED ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), RATE_05, amountTax});
             totalTax = totalTax + amountTax;
             ttc = ttc + amountTax;
         }

@@ -9,6 +9,8 @@ public class Product {
 
     private Double amountHT;
 
+    private Double amountTTC;
+
     private boolean imported;
 
     private boolean tvaApplied;
@@ -27,6 +29,14 @@ public class Product {
 
     public void setAmountHT(Double amountHT) {
         this.amountHT = amountHT;
+    }
+
+    public Double getAmountTTC() {
+        return amountTTC;
+    }
+
+    public void setAmountTTC(Double amountTTC) {
+        this.amountTTC = amountTTC;
     }
 
     public boolean isImported() {

@@ -16,7 +16,7 @@ import java.util.function.Function;
  * Created by michael on 13/06/17.
  */
 @Singleton
-public class ProductManager implements IProductManager, IProductFormat {
+public class CartManager implements ICartManager, IProductFormat {
 
     @Inject
     @Log

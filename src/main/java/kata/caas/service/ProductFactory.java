@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class ProductFactory {
 
     @Inject
-    private IProductManager productManager;
+    private ICartManager productManager;
 
     public Product addBookProduct(Double amountHT) {
         return productManager.addProduct("Book", amountHT, Boolean.FALSE, Boolean.FALSE);

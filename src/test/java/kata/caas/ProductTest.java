@@ -2,7 +2,7 @@ package kata.caas;
 
 import kata.caas.business.Product;
 import kata.caas.service.ProductFactory;
-import kata.caas.service.ProductManager;
+import kata.caas.service.CartManager;
 import kata.caas.util.WeldJUnit4Runner;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +21,7 @@ public class ProductTest {
     private ProductFactory productFactory;
 
     @Inject
-    private ProductManager productManager;
+    private CartManager productManager;
 
     @Before
     public void clean() {

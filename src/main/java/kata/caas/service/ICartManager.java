@@ -5,7 +5,7 @@ import kata.caas.business.Product;
 /**
  * Created by ORY099M on 15/06/2017.
  */
-public interface IProductManager {
+public interface ICartManager {
 
     Product addProduct(String label, Double amountHT, Boolean tvaApplied, Boolean imported);
 

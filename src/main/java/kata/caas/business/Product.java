@@ -1,4 +1,4 @@
-package kata.caas;
+package kata.caas.business;
 
 /**
  * Created by michael on 13/06/17.

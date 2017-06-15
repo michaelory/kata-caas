@@ -1,49 +1,44 @@
-package kata.caas;
+package kata.caas.service;
 
+import kata.caas.business.Product;
+import kata.caas.service.format.Format;
+import kata.caas.service.format.IProductFormat;
+import kata.caas.util.Log;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
  * Created by michael on 13/06/17.
  */
-public class ProductManager {
+@Singleton
+public class ProductManager implements IProductManager, IProductFormat {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProductManager.class);
+    @Inject
+    @Log
+    private Logger LOG;
 
     private static final double RATE_10 = 0.10;
     private static final double RATE_05 = 0.05;
-    private static final String FORMAT_PATTERN = "0.00";
 
-    private Function<Double, Double> ROUND_CHOICE = (tauxTax) -> tauxTax == RATE_10 ? RATE_05 : RATE_10;
-    private BiFunction<Double, Double, Double> APPLY_TAX = (amountHT, tauxTax) -> Math.round(amountHT * tauxTax / ROUND_CHOICE.apply(tauxTax)) * ROUND_CHOICE.apply(tauxTax);
+    private static final Function<Double, Double> ROUND_CHOICE = (tauxTax) -> tauxTax == RATE_10 ? RATE_05 : RATE_10;
+    private static final BiFunction<Double, Double, Double> APPLY_TAX = (amountHT, tauxTax) -> Math.round(amountHT * tauxTax / ROUND_CHOICE.apply(tauxTax)) * ROUND_CHOICE.apply(tauxTax);
 
-    private List<Product> products = new ArrayList<>();
+    private Double totalTax;
+    private Double totalAmount;
 
-    private Double totalTax = new Double(0);
-    private Double totalAmount = new Double(0);
-
-    private DecimalFormat decimalFormat;
-
-    public ProductManager() {
-        decimalFormat = new DecimalFormat(FORMAT_PATTERN);
-        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+    @PostConstruct
+    @Override
+    public void clearCart() {
+        totalTax = new Double(0);
+        totalAmount = new Double(0);
     }
 
-    public Product addProduct(String label, Double amountHT) {
-        return addProduct(label, amountHT, Boolean.FALSE, Boolean.FALSE);
-    }
-
-    public Product addProduct(String label, Double amountHT, Boolean tvaApplied) {
-        return addProduct(label, amountHT, tvaApplied, Boolean.FALSE);
-    }
-
+    @Override
     public Product addProduct(String label, Double amountHT, Boolean tvaApplied, Boolean imported) {
         Product product = new Product();
         product.setLabel(label);
@@ -52,18 +47,7 @@ public class ProductManager {
         product.setImported(imported);
 
         calculateAmounts(product);
-        products.add(product);
         return product;
-    }
-
-    public String format(Double amountTTC) {
-        return decimalFormat.format(amountTTC);
-    }
-
-    public void print() {
-        for (Product p : products) {
-
-        }
     }
 
     private void calculateAmounts(Product product) {
@@ -87,10 +71,30 @@ public class ProductManager {
         product.setAmountTTC(ttc);
     }
 
+    @Override
+    @Format
+    public Double formatAmountTTC(Product product) {
+        return product.getAmountTTC();
+    }
+
+    @Override
+    @Format
+    public Double formatTotalTax() {
+        return totalTax;
+    }
+
+    @Override
+    @Format
+    public Double formatTotalAmount() {
+        return totalAmount;
+    }
+
+    @Override
     public Double getTotalTax() {
         return totalTax;
     }
 
+    @Override
     public Double getTotalAmount() {
         return totalAmount;
     }

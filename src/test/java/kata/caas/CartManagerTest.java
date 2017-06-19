@@ -1,7 +1,9 @@
 package kata.caas;
 
 import kata.caas.business.Cart;
+import kata.caas.business.Product;
 import kata.caas.service.bill.FileException;
+import kata.caas.service.cart.CartHelper;
 import kata.caas.service.cart.ICartManager;
 import kata.caas.util.WeldJUnit4Runner;
 import org.junit.Assert;
@@ -16,6 +18,9 @@ import javax.inject.Inject;
  */
 @RunWith(WeldJUnit4Runner.class)
 public class CartManagerTest {
+
+    @Inject
+    private CartHelper cartHelper;
 
     @Inject
     private ICartManager cartManager;
@@ -51,6 +56,18 @@ public class CartManagerTest {
         cartManager.addProduct("F1", 1.0, Boolean.FALSE, Boolean.FALSE);
         cartManager.addProduct("F1", 2.0, Boolean.FALSE, Boolean.FALSE);
         cartManager.addProduct("F2", 4.0, Boolean.FALSE, Boolean.FALSE);
+        try {
+            cartManager.generateBill("monfichier.txt");
+        } catch (FileException e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testInput1_bill() {
+        cartHelper.addBookToCart(12.49);
+        cartHelper.addServiceToCart(14.99);
+        cartHelper.addFoodToCart(0.85);
         try {
             cartManager.generateBill("monfichier.txt");
         } catch (FileException e) {

@@ -1,8 +1,10 @@
-package kata.caas.service;
+package kata.caas.service.cart;
 
 import kata.caas.business.Product;
+import kata.caas.service.cart.ICartManager;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by ORY099M on 15/06/2017.

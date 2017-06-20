@@ -8,7 +8,6 @@ import kata.caas.service.cart.ICartManager;
 import kata.caas.util.WeldJUnit4Runner;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

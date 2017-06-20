@@ -1,3 +1,5 @@
+Code Review : https://www.codacy.com/app/michaelory/kata-caas/dashboard
+
 Story: Calcul de taxes
 ======================
 

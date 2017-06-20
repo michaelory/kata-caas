@@ -43,7 +43,7 @@ public class CartManagerTest {
     }
 
     @Test
-    public void testAddProduct_nFamilly() {
+    public void testAddProductNFamilly() {
         Assert.assertTrue(cartManager.getCart().getCartMap().isEmpty());
         cartManager.addProduct("F1", 1.0, Boolean.FALSE, Boolean.FALSE);
         cartManager.addProduct("F1", 2.0, Boolean.FALSE, Boolean.FALSE);
@@ -67,7 +67,7 @@ public class CartManagerTest {
     }
 
     @Test
-    public void testInput1_bill() {
+    public void testInput1Bill() {
         cartHelper.addBookToCart(12.49);
         cartHelper.addServiceToCart(14.99);
         cartHelper.addFoodToCart(0.85);
@@ -79,7 +79,7 @@ public class CartManagerTest {
     }
 
     @Test
-    public void testInput1_billPrint() {
+    public void testInput1BillPrint() {
         cartHelper.addBookToCart(12.49);
         cartHelper.addServiceToCart(14.99);
         cartHelper.addFoodToCart(0.85);

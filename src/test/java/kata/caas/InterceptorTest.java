@@ -2,6 +2,7 @@ package kata.caas;
 
 import kata.caas.service.format.Format;
 import kata.caas.util.WeldJUnit4Runner;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,8 +19,8 @@ public class InterceptorTest {
 
     @Test
     public void testInterceptor() {
-        assert "myVehicle".equals(vehicle.getName());
-        assert vehicle.getPower() == 15.02;
+        Assert.assertTrue("myVehicle".equals(vehicle.getName()));
+        Assert.assertTrue(vehicle.getPower() == 15.02);
     }
 
     public static class Vehicle implements IVehicle {

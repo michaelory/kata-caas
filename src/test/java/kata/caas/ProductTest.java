@@ -34,11 +34,11 @@ public class ProductTest {
         Product cd = cartHelper.addServiceToCart(14.99);
         Product barre = cartHelper.addFoodToCart(0.85);
 
-        Assert.assertTrue(12.49 == cartManager.formatAmountTTC(livre));
-        Assert.assertTrue(16.49 == cartManager.formatAmountTTC(cd));
-        Assert.assertTrue(0.85 == cartManager.formatAmountTTC(barre));
-        Assert.assertTrue(1.50 == cartManager.formatTotalTax());
-        Assert.assertTrue(29.83 == cartManager.formatTotalAmount());
+        Assert.assertTrue(12.49 == cartManager.getCart().formatAmountTTC(livre));
+        Assert.assertTrue(16.49 == cartManager.getCart().formatAmountTTC(cd));
+        Assert.assertTrue(0.85 == cartManager.getCart().formatAmountTTC(barre));
+        Assert.assertTrue(1.50 == cartManager.getCart().formatTotalTax());
+        Assert.assertTrue(29.83 == cartManager.getCart().formatTotalAmount());
     }
 
     @Test
@@ -46,10 +46,10 @@ public class ProductTest {
         Product boite = cartHelper.addFoodImportedToCart(10.0);
         Product parfum = cartHelper.addServiceImportedToCart(47.5);
 
-        Assert.assertTrue(10.50 == cartManager.formatAmountTTC(boite));
-        Assert.assertTrue(54.65 == cartManager.formatAmountTTC(parfum));
-        Assert.assertTrue(7.65 == cartManager.formatTotalTax());
-        Assert.assertTrue(65.15 == cartManager.formatTotalAmount());
+        Assert.assertTrue(10.50 == cartManager.getCart().formatAmountTTC(boite));
+        Assert.assertTrue(54.65 == cartManager.getCart().formatAmountTTC(parfum));
+        Assert.assertTrue(7.65 == cartManager.getCart().formatTotalTax());
+        Assert.assertTrue(65.15 == cartManager.getCart().formatTotalAmount());
     }
 
     @Test
@@ -59,11 +59,11 @@ public class ProductTest {
         Product pillule = cartHelper.addMedicalToCart(9.75);
         Product chocolat = cartHelper.addFoodImportedToCart(11.25);
 
-        Assert.assertTrue(32.19 == cartManager.formatAmountTTC(parfumImporte));
-        Assert.assertTrue(20.89 == cartManager.formatAmountTTC(parfum));
-        Assert.assertTrue(9.75 == cartManager.formatAmountTTC(pillule));
-        Assert.assertTrue(11.85 == cartManager.formatAmountTTC(chocolat));
-        Assert.assertTrue(6.70 == cartManager.formatTotalTax());
-        Assert.assertTrue(74.68 == cartManager.formatTotalAmount());
+        Assert.assertTrue(32.19 == cartManager.getCart().formatAmountTTC(parfumImporte));
+        Assert.assertTrue(20.89 == cartManager.getCart().formatAmountTTC(parfum));
+        Assert.assertTrue(9.75 == cartManager.getCart().formatAmountTTC(pillule));
+        Assert.assertTrue(11.85 == cartManager.getCart().formatAmountTTC(chocolat));
+        Assert.assertTrue(6.70 == cartManager.getCart().formatTotalTax());
+        Assert.assertTrue(74.68 == cartManager.getCart().formatTotalAmount());
     }
 }

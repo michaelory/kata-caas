@@ -1,29 +1,61 @@
 package kata.caas.business;
 
-import java.util.List;
+import kata.caas.service.format.Format;
+import kata.caas.service.format.IProductFormat;
+
+import javax.inject.Singleton;
+import java.util.Map;
 
 /**
- * Created by ORY099M on 19/06/2017.
+ * Created by ORY099M on 20/06/2017.
  */
-public class Cart {
+@Singleton
+public class Cart implements IProductFormat {
 
-    private int quantity;
+    private Map<String, QuantityOfProduct> cartMap;
 
-    private List<Product> products;
+    private Double totalTax;
+    private Double totalAmount;
 
-    public int getQuantity() {
-        return quantity;
+    @Override
+    @Format
+    public Double formatAmountTTC(Product product) {
+        return product.getAmountTTC();
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    @Override
+    @Format
+    public Double formatTotalTax() {
+        return totalTax;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    @Override
+    @Format
+    public Double formatTotalAmount() {
+        return getTotalAmount();
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public Map<String, QuantityOfProduct> getCartMap() {
+        return cartMap;
+    }
+
+    public void setCartMap(Map<String, QuantityOfProduct> cartMap) {
+        this.cartMap = cartMap;
+    }
+
+    public Double getTotalTax() {
+        return totalTax;
+    }
+
+    public void setTotalTax(Double totalTax) {
+        this.totalTax = totalTax;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

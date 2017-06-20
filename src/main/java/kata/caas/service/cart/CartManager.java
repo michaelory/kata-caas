@@ -2,36 +2,28 @@ package kata.caas.service.cart;
 
 import kata.caas.business.Cart;
 import kata.caas.business.Product;
-import kata.caas.service.bill.BillImpl;
-import kata.caas.service.bill.FileException;
-import kata.caas.service.bill.IBillManager;
-import kata.caas.service.format.Format;
-import kata.caas.service.format.IProductFormat;
+import kata.caas.business.QuantityOfProduct;
 import kata.caas.util.Log;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
  * Created by michael on 13/06/17.
  */
-@Singleton
-public class CartManager implements ICartManager, IProductFormat, IBillManager {
+public class CartManager implements ICartManager {
 
     @Inject
     @Log
     private Logger LOG;
 
     @Inject
-    @BillImpl
-    private IBillManager billManager;
+    private Cart cart;
 
     private static final double RATE_10 = 0.10;
     private static final double RATE_05 = 0.05;
@@ -39,19 +31,15 @@ public class CartManager implements ICartManager, IProductFormat, IBillManager {
     private static final Function<Double, Double> ROUND_CHOICE = (tauxTax) -> tauxTax == RATE_10 ? RATE_05 : RATE_10;
     private static final BiFunction<Double, Double, Double> APPLY_TAX = (amountHT, tauxTax) -> Math.round(amountHT * tauxTax / ROUND_CHOICE.apply(tauxTax)) * ROUND_CHOICE.apply(tauxTax);
 
-    private Double totalTax;
-    private Double totalAmount;
-    private Map<String, Cart> cartMap;
-
     @PostConstruct
     @Override
     public void clearCart() {
-        totalTax = new Double(0);
-        totalAmount = new Double(0);
-        if (cartMap == null)
-            cartMap = new HashMap();
+        cart.setTotalTax(new Double(0));
+        cart.setTotalAmount(new Double(0));
+        if (cart.getCartMap() == null)
+            cart.setCartMap(new HashMap());
         else
-            cartMap.clear();
+            cart.getCartMap().clear();
     }
 
     @Override
@@ -66,11 +54,11 @@ public class CartManager implements ICartManager, IProductFormat, IBillManager {
 
     private Product addProduct(Product product) {
         calculateAmounts(product);
-        cartMap.compute(product.getLabel(), (key, p) -> {
+        getCart().getCartMap().compute(product.getLabel(), (key, p) -> {
             if (p != null)
                 p.setQuantity(p.getQuantity() + 1);
             else {
-                p = new Cart();
+                p = new QuantityOfProduct();
                 p.setQuantity(1);
                 p.setProducts(new ArrayList<>());
             }
@@ -85,62 +73,24 @@ public class CartManager implements ICartManager, IProductFormat, IBillManager {
         if (product.isTvaApplied()) {
             double amountTax = APPLY_TAX.apply(product.getAmountHT(), RATE_10);
             LOG.debug("{} APPLY TVA ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), RATE_10, amountTax});
-            totalTax = totalTax + amountTax;
+            getCart().setTotalTax(getCart().getTotalTax() + amountTax);
             ttc = ttc + amountTax;
         }
 
         if (product.isImported()) {
             double amountTax = APPLY_TAX.apply(product.getAmountHT(), RATE_05);
             LOG.debug("{} APPLY IMPORTED ht : {}, taux tax : {}, amountTax : {}", new Object[]{product.getLabel(), product.getAmountHT(), RATE_05, amountTax});
-            totalTax = totalTax + amountTax;
+            getCart().setTotalTax(getCart().getTotalTax() + amountTax);
             ttc = ttc + amountTax;
         }
         LOG.debug("{} TTC : {}", new Object[]{product.getLabel(), ttc});
 
-        totalAmount = totalAmount + ttc;
+        getCart().setTotalAmount(getCart().getTotalAmount() + ttc);
         product.setAmountTTC(ttc);
     }
 
     @Override
-    public void generateBill(String path) throws FileException {
-        billManager.generateBill(path);
-    }
-
-    @Override
-    public void printBill() throws FileException {
-        billManager.printBill();
-    }
-
-    @Override
-    @Format
-    public Double formatAmountTTC(Product product) {
-        return product.getAmountTTC();
-    }
-
-    @Override
-    @Format
-    public Double formatTotalTax() {
-        return totalTax;
-    }
-
-    @Override
-    @Format
-    public Double formatTotalAmount() {
-        return totalAmount;
-    }
-
-    @Override
-    public Double getTotalTax() {
-        return totalTax;
-    }
-
-    @Override
-    public Double getTotalAmount() {
-        return totalAmount;
-    }
-
-    @Override
-    public Map<String, Cart> getCart() {
-        return cartMap;
+    public Cart getCart() {
+        return cart;
     }
 }

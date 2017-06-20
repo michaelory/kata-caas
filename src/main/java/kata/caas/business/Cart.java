@@ -1,8 +1,5 @@
 package kata.caas.business;
 
-import kata.caas.service.format.Format;
-import kata.caas.service.format.IProductFormat;
-
 import javax.inject.Singleton;
 import java.util.Map;
 
@@ -10,30 +7,13 @@ import java.util.Map;
  * Created by ORY099M on 20/06/2017.
  */
 @Singleton
-public class Cart implements IProductFormat {
+public class Cart {
 
     private Map<String, QuantityOfProduct> cartMap;
 
     private Double totalTax;
+    
     private Double totalAmount;
-
-    @Override
-    @Format
-    public Double formatAmountTTC(Product product) {
-        return product.getAmountTTC();
-    }
-
-    @Override
-    @Format
-    public Double formatTotalTax() {
-        return totalTax;
-    }
-
-    @Override
-    @Format
-    public Double formatTotalAmount() {
-        return getTotalAmount();
-    }
 
     public Map<String, QuantityOfProduct> getCartMap() {
         return cartMap;

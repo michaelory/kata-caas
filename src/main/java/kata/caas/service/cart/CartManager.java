@@ -3,6 +3,7 @@ package kata.caas.service.cart;
 import kata.caas.business.Cart;
 import kata.caas.business.Product;
 import kata.caas.business.QuantityOfProduct;
+import kata.caas.service.format.IFormat;
 import kata.caas.util.Log;
 import org.slf4j.Logger;
 
@@ -24,6 +25,9 @@ public class CartManager implements ICartManager {
 
     @Inject
     private Cart cart;
+
+    @Inject
+    private IFormat format;
 
     private static final double RATE_10 = 0.10;
     private static final double RATE_05 = 0.05;
@@ -92,5 +96,10 @@ public class CartManager implements ICartManager {
     @Override
     public Cart getCart() {
         return cart;
+    }
+
+    @Override
+    public IFormat getFormat() {
+        return format;
     }
 }

@@ -3,6 +3,7 @@ package kata.caas.service.bill;
 import kata.caas.business.Cart;
 import kata.caas.business.Product;
 import kata.caas.business.QuantityOfProduct;
+import kata.caas.service.format.IFormat;
 
 import javax.inject.Inject;
 import java.awt.print.Printable;
@@ -25,6 +26,9 @@ public class BillManager implements IBillManager {
     @Inject
     private Cart cart;
 
+    @Inject
+    private IFormat format;
+
     private String path;
 
     @Override
@@ -40,16 +44,16 @@ public class BillManager implements IBillManager {
                     writer.write(" ");
                     writer.write(product.getLabel());
                     writer.write(" ");
-                    writer.write(String.valueOf(cart.formatAmountTTC(product)));
+                    writer.write(String.valueOf(format.formatAmountTTC(product)));
                     writer.newLine();
                 }
             }
             writer.newLine();
             writer.write("Montant des taxes : ");
-            writer.write(String.valueOf(cart.formatTotalTax()));
+            writer.write(String.valueOf(format.formatTotalTax()));
             writer.newLine();
             writer.write("Total : ");
-            writer.write(String.valueOf(cart.formatTotalAmount()));
+            writer.write(String.valueOf(format.formatTotalAmount()));
         } catch (IOException ioe) {
             throw new FileException(ioe.getMessage(), ioe);
         }
@@ -64,7 +68,7 @@ public class BillManager implements IBillManager {
                 int x = (int) pageFormat.getImageableX();
                 int y = (int) pageFormat.getImageableY();
                 //for (String contentLine : contents)
-                    graphics.drawString("TEST", x, y);
+                graphics.drawString("TEST", x, y);
                 return Printable.PAGE_EXISTS;
             };
             PrinterJob job = PrinterJob.getPrinterJob();

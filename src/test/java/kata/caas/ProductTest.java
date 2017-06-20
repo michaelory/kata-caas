@@ -3,6 +3,7 @@ package kata.caas;
 import kata.caas.business.Product;
 import kata.caas.service.cart.CartHelper;
 import kata.caas.service.cart.ICartManager;
+import kata.caas.service.format.IFormat;
 import kata.caas.util.WeldJUnit4Runner;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +24,9 @@ public class ProductTest {
     @Inject
     private ICartManager cartManager;
 
+    @Inject
+    private IFormat format;
+
     @Before
     public void clean() {
         cartManager.clearCart();
@@ -34,11 +38,11 @@ public class ProductTest {
         Product cd = cartHelper.addServiceToCart(14.99);
         Product barre = cartHelper.addFoodToCart(0.85);
 
-        Assert.assertTrue(12.49 == cartManager.getCart().formatAmountTTC(livre));
-        Assert.assertTrue(16.49 == cartManager.getCart().formatAmountTTC(cd));
-        Assert.assertTrue(0.85 == cartManager.getCart().formatAmountTTC(barre));
-        Assert.assertTrue(1.50 == cartManager.getCart().formatTotalTax());
-        Assert.assertTrue(29.83 == cartManager.getCart().formatTotalAmount());
+        Assert.assertTrue(12.49 == format.formatAmountTTC(livre));
+        Assert.assertTrue(16.49 == format.formatAmountTTC(cd));
+        Assert.assertTrue(0.85 == format.formatAmountTTC(barre));
+        Assert.assertTrue(1.50 == format.formatTotalTax());
+        Assert.assertTrue(29.83 == format.formatTotalAmount());
     }
 
     @Test
@@ -46,10 +50,10 @@ public class ProductTest {
         Product boite = cartHelper.addFoodImportedToCart(10.0);
         Product parfum = cartHelper.addServiceImportedToCart(47.5);
 
-        Assert.assertTrue(10.50 == cartManager.getCart().formatAmountTTC(boite));
-        Assert.assertTrue(54.65 == cartManager.getCart().formatAmountTTC(parfum));
-        Assert.assertTrue(7.65 == cartManager.getCart().formatTotalTax());
-        Assert.assertTrue(65.15 == cartManager.getCart().formatTotalAmount());
+        Assert.assertTrue(10.50 == format.formatAmountTTC(boite));
+        Assert.assertTrue(54.65 == format.formatAmountTTC(parfum));
+        Assert.assertTrue(7.65 == format.formatTotalTax());
+        Assert.assertTrue(65.15 == format.formatTotalAmount());
     }
 
     @Test
@@ -59,11 +63,11 @@ public class ProductTest {
         Product pillule = cartHelper.addMedicalToCart(9.75);
         Product chocolat = cartHelper.addFoodImportedToCart(11.25);
 
-        Assert.assertTrue(32.19 == cartManager.getCart().formatAmountTTC(parfumImporte));
-        Assert.assertTrue(20.89 == cartManager.getCart().formatAmountTTC(parfum));
-        Assert.assertTrue(9.75 == cartManager.getCart().formatAmountTTC(pillule));
-        Assert.assertTrue(11.85 == cartManager.getCart().formatAmountTTC(chocolat));
-        Assert.assertTrue(6.70 == cartManager.getCart().formatTotalTax());
-        Assert.assertTrue(74.68 == cartManager.getCart().formatTotalAmount());
+        Assert.assertTrue(32.19 == format.formatAmountTTC(parfumImporte));
+        Assert.assertTrue(20.89 == format.formatAmountTTC(parfum));
+        Assert.assertTrue(9.75 == format.formatAmountTTC(pillule));
+        Assert.assertTrue(11.85 == format.formatAmountTTC(chocolat));
+        Assert.assertTrue(6.70 == format.formatTotalTax());
+        Assert.assertTrue(74.68 == format.formatTotalAmount());
     }
 }

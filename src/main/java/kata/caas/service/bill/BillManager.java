@@ -4,24 +4,29 @@ import kata.caas.business.Cart;
 import kata.caas.business.Product;
 import kata.caas.business.QuantityOfProduct;
 import kata.caas.service.format.IFormat;
+import kata.caas.util.Log;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaSizeName;
+import java.awt.*;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by ORY099M on 19/06/2017.
  */
 public class BillManager implements IBillManager {
+
+    @Inject
+    @Log
+    private Logger LOG;
 
     @Inject
     private Cart cart;
@@ -61,27 +66,8 @@ public class BillManager implements IBillManager {
 
     @Override
     public void printBill() throws FileException {
-        Path path = Paths.get(this.path);
         try {
-            List<String> contents = Files.readAllLines(path);
-            Printable printable = (graphics, pageFormat, pageIndex) -> {
-                int x = (int) pageFormat.getImageableX();
-                int y = (int) pageFormat.getImageableY();
-                //for (String contentLine : contents)
-                graphics.drawString("TEST", x, y);
-                return Printable.PAGE_EXISTS;
-            };
-            PrinterJob job = PrinterJob.getPrinterJob();
-            job.setPrintable(printable);
-            boolean doPrint = job.printDialog();
-            if (doPrint) {
-                try {
-                    job.print();
-                } catch (PrinterException ioe) {
-                    throw new FileException(ioe.getMessage(), ioe);
-                }
-            }
-
+            Desktop.getDesktop().print(new File(path));
         } catch (IOException ioe) {
             throw new FileException(ioe.getMessage(), ioe);
         }

@@ -80,7 +80,6 @@ public class CartManagerTest {
     }
 
     @Test
-    @Ignore
     public void testInput1_billPrint() {
         cartHelper.addBookToCart(12.49);
         cartHelper.addServiceToCart(14.99);

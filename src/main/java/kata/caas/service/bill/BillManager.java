@@ -25,7 +25,7 @@ public class BillManager implements IBillManager {
     private String path;
 
     @Override
-    public void generateBill(String path, ICartManager cartManager) throws FileException {
+    public void generateBill(String path, ICartManager cartManager) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), Charset.forName("US-ASCII"))) {
             this.path = path;
             for (Map.Entry<String, List<Product>> cartEntry : cartManager.getCart().entrySet()) {
@@ -48,16 +48,18 @@ public class BillManager implements IBillManager {
             writer.write("Total : ");
             writer.write(String.valueOf(cartManager.getTotalAmount()));
         } catch (IOException ioe) {
-            throw new FileException(ioe.getMessage(), ioe);
+            LOG.error(ioe.getMessage(), ioe);
+            throw ioe;
         }
     }
 
     @Override
-    public void printBill() throws FileException {
+    public void printBill() throws IOException {
         try {
             Desktop.getDesktop().print(new File(path));
         } catch (IOException ioe) {
-            throw new FileException(ioe.getMessage(), ioe);
+            LOG.error(ioe.getMessage(), ioe);
+            throw ioe;
         }
     }
 }

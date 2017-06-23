@@ -12,7 +12,7 @@ import org.junit.Test;
 /**
  * Created by michael on 13/06/17.
  */
-public class BillManagerTest {
+public class BillManagerTestIT {
 
     private ICartManager cartManager;
 
@@ -25,12 +25,13 @@ public class BillManagerTest {
     }
 
     @Test
-    public void testGenerateBillInput1() {
+    public void testPrintBillInput1() {
         cartManager.addBookToCart(12.49);
         cartManager.addServiceToCart(14.99);
         cartManager.addFoodToCart(0.85);
         try {
             billManager.generateBill("monfichier.txt", cartManager);
+            billManager.printBill();
         } catch (FileException e) {
             Assert.fail(e.getMessage());
         }

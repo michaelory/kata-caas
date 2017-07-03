@@ -1,13 +1,14 @@
 package kata.caas;
 
 import kata.caas.service.bill.BillManager;
-import kata.caas.service.bill.FileException;
 import kata.caas.service.bill.IBillManager;
 import kata.caas.service.cart.CartManager;
 import kata.caas.service.cart.ICartManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Created by michael on 13/06/17.
@@ -32,7 +33,7 @@ public class BillManagerTestIT {
         try {
             billManager.generateBill("monfichier.txt", cartManager);
             billManager.printBill();
-        } catch (FileException e) {
+        } catch (IOException e) {
             Assert.fail(e.getMessage());
         }
     }
